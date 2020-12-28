@@ -1,15 +1,16 @@
 const mongoose = require("mongoose");
 
 const quizSchema = mongoose.Schema({
-  quizID: Number,
   quiz: [
     {
-      questionStatement: {
+      name: String,
+      question: {
         type: String,
         required: true,
       },
       options: [
         {
+          name: String,
           option: {
             type: String,
             required: true,
@@ -25,4 +26,4 @@ const quizSchema = mongoose.Schema({
 });
 
 const Quizzes = mongoose.model("Quizzes", quizSchema);
-module.exports.Quizzes = Quizzes;
+module.exports = { Quizzes };

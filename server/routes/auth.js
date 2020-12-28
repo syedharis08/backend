@@ -5,7 +5,7 @@ const router = express.Router();
 
 const { User } = require("../models/student");
 
-router.post("/", async (req, res) => {
+router.post("/login", async (req, res) => {
   const { error } = schema.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
