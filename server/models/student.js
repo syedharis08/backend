@@ -23,6 +23,14 @@ const stuedntSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  result: {
+    result: [
+      {
+        result: String,
+        quiz: String,
+      },
+    ],
+  },
 });
 
 stuedntSchema.methods.genAuthToken = function () {

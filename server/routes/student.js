@@ -14,6 +14,7 @@ router.post("/signup", async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(400).send("User already registered.");
 
+  //resultUpdateStart
   user = new User(
     _.pick(req.body, ["name", "email", "password", "confirmPassword"])
   );
@@ -38,5 +39,37 @@ router.get("/me", auth, async (req, res) => {
     res.send(error);
   }
 });
+
+router.put("/update-password", async (req, res) => {
+  const salt = await bcrypt.genSalt(10);
+  const password = await bcrypt.hash(req.body.password, salt);
+  const user = await User.findOne({ email: req.body.email });
+
+  console.log(user);
+  user.password = password;
+  await user.save();
+
+  res.send(true);
+});
+
+router.post("/updateResult", async(req, res)=>{
+  console.log(req.body.Score);
+  console.log(req.body.quiz);
+
+  let result = await Quizzes.create(req.body.Quiz);
+  console.log(newQuiz);
+
+  const result = await Chapters.findByIdAndUpdate(
+    { _id: req.body.studentid },
+    {
+      result: { id: quiz._id },
+    },
+    { new: true }
+  );
+  if (!quiz)
+    return res.status(404).send("The Quiz with the given ID was not found.");
+
+  return res.status(201).send(true);
+})
 
 module.exports = router;
