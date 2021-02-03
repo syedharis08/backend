@@ -52,24 +52,30 @@ router.put("/update-password", async (req, res) => {
   res.send(true);
 });
 
-router.post("/updateResult", async(req, res)=>{
-  console.log(req.body.Score);
-  console.log(req.body.quiz);
-
-  let result = await Quizzes.create(req.body.Quiz);
-  console.log(newQuiz);
-
-  const result = await Chapters.findByIdAndUpdate(
-    { _id: req.body.studentid },
+router.post("/updateResult", async (req, res) => {
+  const Student = await User.findByIdAndUpdate(
+    req.query._id,
     {
-      result: { id: quiz._id },
+      $push: {
+        result: {
+          obtained: req.body.obtainedmarks,
+          quizid: req.body.quizid,
+          chaptername: req.body.chaptername,
+        },
+      },
     },
     { new: true }
   );
-  if (!quiz)
-    return res.status(404).send("The Quiz with the given ID was not found.");
+  if (!Student) res.sendStatus(404).send("Unable to find user!");
 
   return res.status(201).send(true);
-})
+});
+
+router.get("/getResult", async (req, res) => {
+  const Student = await User.findOne({ _id: req.query.id });
+  if (!Student) res.sendStatus(404).send("Unable to find user!");
+
+  return res.status(201).send(Student.result);
+});
 
 module.exports = router;

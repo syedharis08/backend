@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
-const stuedntSchema = new mongoose.Schema({
+const studentSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -23,17 +23,16 @@ const stuedntSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  result: {
-    result: [
-      {
-        result: String,
-        quiz: String,
-      },
-    ],
-  },
+  result: [
+    {
+      obtained: Number,
+      quizid: String,
+      chaptername: String,
+    },
+  ],
 });
 
-stuedntSchema.methods.genAuthToken = function () {
+studentSchema.methods.genAuthToken = function () {
   const token = jwt.sign(
     { _id: this._id, name: this.name, email: this.email },
     config.get("jwtPrivateKey")
@@ -41,7 +40,7 @@ stuedntSchema.methods.genAuthToken = function () {
   return token;
 };
 
-const User = mongoose.model("Student", stuedntSchema);
+const User = mongoose.model("Student", studentSchema);
 
 const schema = Joi.object({
   name: Joi.string().required(),

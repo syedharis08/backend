@@ -10,8 +10,8 @@ router.get("/", async (req, res) => {
 });
 
 //API route to get a quiz with a specific ID.
-router.get("/:id", async (req, res) => {
-  const Chapter = await Chapters.findById(req.params.id);
+router.get("/getQuiz", async (req, res) => {
+  const Chapter = await Chapters.findById({ _id: req.query.id });
   if (Chapter.quizzes === {})
     return res.status(404).send("Quiz for this chapter is not available.");
   const Quiz = await Quizzes.findById(Chapter.quizzes.id);
